@@ -910,6 +910,7 @@ footer{
 #libraryPage .library-list-item strong{color:#5D865F}
 #libraryPage .library-empty{background:#FFFDF5;color:#91A187;border:1px dashed #DCE8D4;border-radius:15px}
 @media(max-width:600px){
+  #libraryPage #currentClassBookshelf{max-width:100%}
   #libraryPage .bookshelf-wrap{padding:16px 6px 20px}
   #libraryPage .bookshelf-row{min-height:132px;padding-left:4px;padding-right:4px;gap:3px}
 }
@@ -1069,7 +1070,11 @@ footer{
 /* 우리 반 책장이 먼저, 다른 반 마을은 아래에 */
 #libraryPage .library-shared-panel{margin-bottom:14px}
 #libraryPage .library-shared-panel h3{color:#7f8f70}
-#libraryPage #currentClassBookshelf{margin-top:18px}
+#libraryPage #currentClassBookshelf{
+  margin:18px auto 0;
+  width:100%;
+  max-width:920px;
+}
 #libraryPage #currentBookshelfHeading{color:#7e8d70}
 #libraryPage .other-rooms-section{
   margin:34px 0 18px;padding:24px 20px 20px;border-radius:28px;
@@ -1309,23 +1314,6 @@ footer{
 #homePage > .section { width:100%; max-width:100%; margin-left:auto; margin-right:auto; }
 #homePage > .section > h2,
 #homePage > .section > .courses { width:100%; }
-
-/* 최종 조정: 도서관 화면에서는 바깥 shell의 1160px 제한도 해제 */
-body:has(#libraryPage.active) .shell{
-  width:min(1320px, calc(100vw - 32px)) !important;
-  max-width:1320px !important;
-}
-#libraryPage.page.active{
-  width:100% !important;
-  max-width:none !important;
-  position:relative;
-  left:auto !important;
-  transform:none !important;
-  margin-left:0 !important;
-  margin-right:0 !important;
-}
-/* 홈 화면의 교실 이동 카드 영역 숨김 */
-#homePage > .section{display:none !important;}
 
 </style>
 </head>
@@ -1607,7 +1595,6 @@ body:has(#libraryPage.active) .shell{
 
 <!-- 하하하 도서관 -->
 <section id="libraryPage" class="page">
-<button class="back" onclick="home()">← 꿈나라 교실로</button>
 <div class="library-page-intro">
   <div style="font-size:48px">📚</div>
   <h2>하하하 도서관</h2>
