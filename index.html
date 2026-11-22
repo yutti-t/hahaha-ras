@@ -636,6 +636,7 @@ nav button:hover,nav a:hover{background:var(--lavender)}
 .page.active{display:block}
 /* 도서관에서는 상단 교실 이동 버튼을 숨기고, 다른 교실과 같은 콘텐츠 폭으로 표시 */
 body.library-page-open header nav{display:none}
+body.library-page-open .home-course-navigation{display:none!important}
 #libraryPage{width:100%;max-width:1000px;margin-left:auto;margin-right:auto}
 @media(max-width:700px){#libraryPage{max-width:100%}}
 .back{
@@ -1504,7 +1505,7 @@ footer{
 </section>
 
 <!-- 과목 카드 -->
-<section class="section">
+<section class="section home-course-navigation">
 <h2>어떤 교실에서 배워볼까요?</h2>
 
 <div class="courses">
