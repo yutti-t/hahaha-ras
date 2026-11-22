@@ -1321,6 +1321,28 @@ footer{
 #homePage > .section > .courses { width:100%; }
 
 </style>
+<style>
+/* 우리 반 도우미 뽑기 - 홈 화면 전용 */
+.class-helper-panel{width:100%;max-width:1000px;margin:28px auto 34px;padding:24px;border:1px solid #E8DDED;border-radius:24px;background:linear-gradient(145deg,#FFF9FC,#F4FAFF);box-shadow:0 5px 18px rgba(112,91,132,.08);box-sizing:border-box}
+.class-helper-panel h2{margin:0;color:#70577F;font-size:22px}
+.class-helper-intro{margin:7px 0 18px;color:#8A8192;font-size:14px;line-height:1.6}
+.class-helper-label{display:block;margin-bottom:7px;color:#75647F;font-size:14px;font-weight:800}
+#classHelperNames{display:block;width:100%;min-height:92px;padding:12px 14px;resize:vertical;border:1px solid #E4D9EA;border-radius:14px;background:#fff;color:#62566A;font:inherit;line-height:1.6;box-sizing:border-box}
+.class-helper-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.class-helper-controls label{margin:0 0 0 5px;color:#75647F;font-size:14px;font-weight:800}
+#classHelperCount{min-width:78px;padding:9px 12px;border:1px solid #E4D9EA;border-radius:12px;background:#fff;color:#66566F;font:inherit}
+.class-helper-button{padding:10px 16px;border:0;border-radius:999px;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.class-helper-button.primary{background:#8C78A8;color:#fff}.class-helper-button.secondary{background:#fff;border:1px solid #E4D9EA;color:#75647F}
+.class-helper-result{margin-top:18px;padding:20px;border-radius:18px;background:#fff;text-align:center}
+.class-helper-day{color:#9A829F;font-size:13px;font-weight:800}
+.class-helper-names{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0 8px}
+.class-helper-person{display:flex;align-items:center;gap:9px;padding:12px 15px;border-radius:14px;background:#FFF2F6;color:#6E5876;font-size:20px;font-weight:900}
+.class-helper-person:nth-child(2n){background:#EEF7FF}
+.class-helper-skip{padding:6px 10px;border:0;border-radius:999px;background:#fff;color:#927A9A;font-size:12px;font-weight:800;cursor:pointer}
+.class-helper-empty{color:#A194A8;font-size:15px}.class-helper-tip{margin:10px 0 0;color:#9A91A3;font-size:12px;line-height:1.6}
+@media(max-width:600px){.class-helper-panel{padding:17px 14px;margin:22px auto}.class-helper-panel h2{font-size:19px}.class-helper-controls{gap:8px}.class-helper-controls label{margin-left:0}.class-helper-button{padding:9px 12px}.class-helper-person{font-size:17px;padding:10px}}
+</style>
+
 </head>
 
 <body>
@@ -1502,6 +1524,25 @@ footer{
   </div>
 </div>
 </div>
+</section>
+
+<!-- 우리 반 도우미 뽑기 -->
+<section class="class-helper-panel" id="classHelperPanel">
+  <h2>🌟 우리 반 도우미 뽑기</h2>
+  <p class="class-helper-intro">이름을 한 번 입력하면 월요일부터 금요일까지 차례대로 도우미를 만나요.</p>
+  <label class="class-helper-label" for="classHelperNames">우리 반 아이들 이름</label>
+  <textarea id="classHelperNames" placeholder="이름을 한 줄에 한 명씩 적어 주세요.&#10;예) 김하늘&#10;이도윤&#10;박서아"></textarea>
+  <div class="class-helper-controls">
+    <button type="button" id="classHelperSave" class="class-helper-button secondary">이름 저장</button>
+    <label for="classHelperCount">하루 도우미</label>
+    <select id="classHelperCount"><option value="1">1명</option><option value="2">2명</option><option value="3">3명</option><option value="4">4명</option></select>
+    <button type="button" id="classHelperDraw" class="class-helper-button primary">오늘의 도우미 뽑기</button>
+  </div>
+  <div class="class-helper-result" aria-live="polite">
+    <div class="class-helper-day" id="classHelperDay">오늘의 도우미</div>
+    <div class="class-helper-names" id="classHelperResult"><span class="class-helper-empty">아이들 이름을 입력하고 저장해 주세요 😊</span></div>
+    <p class="class-helper-tip" id="classHelperTip">결석한 친구가 있으면 해당 친구 옆의 버튼을 눌러 다음 친구에게 순서를 넘길 수 있어요.</p>
+  </div>
 </section>
 
 <!-- 과목 카드 -->
@@ -3788,6 +3829,72 @@ function renderLibraryStars(containerId,type,rating){
   const label = document.getElementById(type==="children" ? "childrenRatingText" : "teacherRatingText");
   if(label) label.textContent = rating ? rating + "점 / 5점" : "아직 별점 없음";
 }
+</script>
+
+<script>
+/* 우리 반 도우미 뽑기: 이름과 순서는 이 브라우저에 저장됩니다. */
+(function initClassHelper(){
+  const namesInput=document.getElementById("classHelperNames");
+  const countSelect=document.getElementById("classHelperCount");
+  const saveButton=document.getElementById("classHelperSave");
+  const drawButton=document.getElementById("classHelperDraw");
+  const resultBox=document.getElementById("classHelperResult");
+  const dayBox=document.getElementById("classHelperDay");
+  const tipBox=document.getElementById("classHelperTip");
+  if(!namesInput||!countSelect||!saveButton||!drawButton||!resultBox||!dayBox)return;
+  const STORAGE_KEY="rasClassHelperV1";
+  const weekdays=["일요일","월요일","화요일","수요일","목요일","금요일","토요일"];
+  let state={names:[],count:1,nextIndex:0,dayKey:"",assigned:[]};
+  function keyFor(date){return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");}
+  function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(error){tipBox.textContent="브라우저 저장 공간을 사용할 수 없어 현재 화면에서만 유지돼요.";}}
+  function render(){
+    resultBox.innerHTML="";
+    if(!state.names.length){resultBox.innerHTML='<span class="class-helper-empty">아이들 이름을 입력하고 저장해 주세요 😊</span>';return;}
+    if(!state.assigned.length){resultBox.innerHTML='<span class="class-helper-empty">이름을 저장한 뒤 오늘의 도우미를 뽑아 보세요!</span>';return;}
+    state.assigned.forEach((name,index)=>{
+      const card=document.createElement("div");card.className="class-helper-person";
+      const label=document.createElement("span");label.textContent=name;
+      const skip=document.createElement("button");skip.type="button";skip.className="class-helper-skip";skip.textContent="결석 · 다음 친구";
+      skip.setAttribute("aria-label",name+" 대신 다음 친구 뽑기");skip.addEventListener("click",()=>skipHelper(index));
+      card.append(label,skip);resultBox.appendChild(card);
+    });
+  }
+  function refreshDay(){
+    const now=new Date();dayBox.textContent="오늘은 "+weekdays[now.getDay()]+" · 오늘의 도우미";
+    if(now.getDay()===0||now.getDay()===6){resultBox.innerHTML='<span class="class-helper-empty">도우미는 월요일부터 금요일까지 만나요 🌷</span>';drawButton.disabled=true;drawButton.style.opacity=".55";return false;}
+    drawButton.disabled=false;drawButton.style.opacity="1";
+    const today=keyFor(now);
+    if(state.dayKey!==today){state.dayKey=today;state.assigned=[];persist();}
+    render();return true;
+  }
+  function readState(){
+    try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(saved&&typeof saved==="object")state={...state,...saved};}catch(error){}
+    if(!Array.isArray(state.names))state.names=[];if(!Array.isArray(state.assigned))state.assigned=[];
+    state.nextIndex=Math.max(0,Number(state.nextIndex)||0);state.count=Math.min(4,Math.max(1,Number(state.count)||1));
+    namesInput.value=state.names.join("\n");countSelect.value=String(state.count);refreshDay();
+  }
+  function saveNames(){
+    const names=namesInput.value.split(/[\n,，、]+/).map(v=>v.trim()).filter(Boolean);
+    if(!names.length){alert("아이들 이름을 한 명 이상 입력해 주세요.");return;}
+    state.names=names;state.assigned=[];state.nextIndex=state.nextIndex%names.length;state.count=Number(countSelect.value)||1;
+    persist();render();tipBox.textContent="이름 "+names.length+"명을 저장했어요. 오늘의 도우미를 뽑아 보세요!";
+  }
+  function drawToday(){
+    if(!refreshDay())return;
+    if(!state.names.length){alert("먼저 아이들 이름을 입력하고 저장해 주세요.");return;}
+    state.count=Number(countSelect.value)||1;const n=Math.min(state.count,state.names.length);state.assigned=[];
+    for(let i=0;i<n;i++)state.assigned.push(state.names[(state.nextIndex+i)%state.names.length]);
+    state.nextIndex=(state.nextIndex+n)%state.names.length;persist();render();
+    tipBox.textContent="오늘의 도우미를 만났어요! 결석한 친구가 있으면 이름 옆의 버튼으로 순서를 넘겨 주세요.";
+  }
+  function skipHelper(index){
+    if(!state.names.length||!state.assigned.length)return;
+    state.assigned[index]=state.names[state.nextIndex%state.names.length];state.nextIndex=(state.nextIndex+1)%state.names.length;persist();render();
+  }
+  saveButton.addEventListener("click",saveNames);drawButton.addEventListener("click",drawToday);
+  countSelect.addEventListener("change",()=>{state.count=Number(countSelect.value)||1;state.assigned=[];persist();render();});
+  readState();
+})();
 </script>
 
 </body>
