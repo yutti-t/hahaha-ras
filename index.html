@@ -637,6 +637,9 @@ nav button:hover,nav a:hover{background:var(--lavender)}
 /* 도서관에서는 상단 교실 이동 버튼을 숨기고, 다른 교실과 같은 콘텐츠 폭으로 표시 */
 body.library-page-open header nav{display:none}
 body.library-page-open .home-course-navigation{display:none!important}
+/* 도서관 화면에서는 홈 전용 도우미 뽑기 배너를 숨김 */
+body.library-page-open .helper-fold-row,
+body.library-page-open #helperContent{display:none!important}
 #libraryPage{width:100%;max-width:1000px;margin-left:auto;margin-right:auto}
 @media(max-width:700px){#libraryPage{max-width:100%}}
 .back{
