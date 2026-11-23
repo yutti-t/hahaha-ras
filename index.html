@@ -1351,6 +1351,19 @@ footer{
 @media(max-width:700px){.class-helper-panel{grid-template-columns:1fr;gap:10px;padding:15px}.helper-machine{width:min(75%,270px)}.helper-art-title{font-size:20px}.helper-gacha-controls{padding:15px}.helper-panel-heading{font-size:19px}.class-helper-person{min-width:82px;font-size:17px}}
 </style>
 
+<style>
+/* 홈 화면 접기/펼치기 버튼 */
+.home-fold-row{display:flex;justify-content:center;margin:18px auto 0;width:100%}
+.home-fold-button{min-width:230px;padding:12px 25px;border:2px solid;border-radius:999px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 rgba(130,105,145,.10),0 7px 16px rgba(130,105,145,.08);transition:transform .16s ease,filter .16s ease}
+.home-fold-button:hover{transform:translateY(-2px);filter:brightness(1.02)}
+.home-fold-button:active{transform:translateY(1px)}
+.routine-fold-button{background:linear-gradient(135deg,#FFF5D9,#FFF0E8);border-color:#F2D8B4;color:#96734C}
+.helper-fold-button{background:linear-gradient(135deg,#FFEAF3,#F0E9FF);border-color:#E9CDE2;color:#865D91}
+#routineContent[hidden],#helperContent[hidden]{display:none!important}
+#routineContent{margin-top:12px}#helperContent{margin-top:10px}
+@media(max-width:600px){.home-fold-button{width:min(100%,300px);font-size:15px;padding:11px 18px}}
+</style>
+
 </head>
 
 <body>
@@ -1472,6 +1485,10 @@ footer{
 </div>
 </div>
 
+<div class="home-fold-row routine-fold-row">
+  <button type="button" class="home-fold-button routine-fold-button" id="routineToggleButton" aria-expanded="false" aria-controls="routineContent" onclick="toggleHomeFold('routine')">🌷 하루 일과 펼치기</button>
+</div>
+<div id="routineContent" hidden>
 <div class="routine-panel">
   <div class="routine-heading">
     <h3>🌷 우리 반 하루 일과</h3>
@@ -1532,9 +1549,14 @@ footer{
   </div>
 </div>
 </div>
+</div>
 </section>
 
 <!-- 우리 반 도우미 뽑기 -->
+<div class="home-fold-row helper-fold-row">
+  <button type="button" class="home-fold-button helper-fold-button" id="helperToggleButton" aria-expanded="false" aria-controls="helperContent" onclick="toggleHomeFold('helper')">🎁 도우미 뽑기 펼치기</button>
+</div>
+<div id="helperContent" hidden>
 <section class="class-helper-panel" id="classHelperPanel">
   <div class="helper-gacha-art" aria-hidden="true">
     <div class="helper-art-title">우리 반<br><strong>도우미 뽑기</strong><span>✦</span></div>
@@ -1575,6 +1597,7 @@ footer{
     </div>
   </div>
 </section>
+</div>
 
 <!-- 과목 카드 -->
 <section class="section home-course-navigation">
@@ -2203,6 +2226,18 @@ function loadAirQuality(){
 }
 
 /* 달력과 일정 메모 접기/펴기 */
+function toggleHomeFold(which){
+  const isRoutine=which==="routine";
+  const content=document.getElementById(isRoutine?"routineContent":"helperContent");
+  const button=document.getElementById(isRoutine?"routineToggleButton":"helperToggleButton");
+  if(!content||!button)return;
+  const opening=content.hidden;
+  content.hidden=!opening;
+  button.setAttribute("aria-expanded",String(opening));
+  if(isRoutine)button.textContent=opening?"🌷 하루 일과 접기":"🌷 하루 일과 펼치기";
+  else button.textContent=opening?"🎁 도우미 뽑기 접기":"🎁 도우미 뽑기 펼치기";
+}
+
 function toggleCalendar(){
   const content=document.getElementById("calendarContent");
   const button=document.getElementById("calendarToggleButton");
