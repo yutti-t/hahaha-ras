@@ -1322,25 +1322,33 @@ footer{
 
 </style>
 <style>
-/* 우리 반 도우미 뽑기 - 홈 화면 전용 */
-.class-helper-panel{width:100%;max-width:1000px;margin:28px auto 34px;padding:24px;border:1px solid #E8DDED;border-radius:24px;background:linear-gradient(145deg,#FFF9FC,#F4FAFF);box-shadow:0 5px 18px rgba(112,91,132,.08);box-sizing:border-box}
-.class-helper-panel h2{margin:0;color:#70577F;font-size:22px}
-.class-helper-intro{margin:7px 0 18px;color:#8A8192;font-size:14px;line-height:1.6}
-.class-helper-label{display:block;margin-bottom:7px;color:#75647F;font-size:14px;font-weight:800}
-#classHelperNames{display:block;width:100%;min-height:92px;padding:12px 14px;resize:vertical;border:1px solid #E4D9EA;border-radius:14px;background:#fff;color:#62566A;font:inherit;line-height:1.6;box-sizing:border-box}
-.class-helper-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
-.class-helper-controls label{margin:0 0 0 5px;color:#75647F;font-size:14px;font-weight:800}
-#classHelperCount{min-width:78px;padding:9px 12px;border:1px solid #E4D9EA;border-radius:12px;background:#fff;color:#66566F;font:inherit}
-.class-helper-button{padding:10px 16px;border:0;border-radius:999px;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
-.class-helper-button.primary{background:#8C78A8;color:#fff}.class-helper-button.secondary{background:#fff;border:1px solid #E4D9EA;color:#75647F}
-.class-helper-result{margin-top:18px;padding:20px;border-radius:18px;background:#fff;text-align:center}
-.class-helper-day{color:#9A829F;font-size:13px;font-weight:800}
-.class-helper-names{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0 8px}
-.class-helper-person{display:flex;align-items:center;gap:9px;padding:12px 15px;border-radius:14px;background:#FFF2F6;color:#6E5876;font-size:20px;font-weight:900}
-.class-helper-person:nth-child(2n){background:#EEF7FF}
-.class-helper-skip{padding:6px 10px;border:0;border-radius:999px;background:#fff;color:#927A9A;font-size:12px;font-weight:800;cursor:pointer}
-.class-helper-empty{color:#A194A8;font-size:15px}.class-helper-tip{margin:10px 0 0;color:#9A91A3;font-size:12px;line-height:1.6}
-@media(max-width:600px){.class-helper-panel{padding:17px 14px;margin:22px auto}.class-helper-panel h2{font-size:19px}.class-helper-controls{gap:8px}.class-helper-controls label{margin-left:0}.class-helper-button{padding:9px 12px}.class-helper-person{font-size:17px;padding:10px}}
+/* 우리 반 도우미 뽑기 - 가챠 테마 */
+.class-helper-panel{width:100%;max-width:1000px;margin:30px auto 36px;padding:22px;box-sizing:border-box;display:grid;grid-template-columns:minmax(260px,.82fr) minmax(0,1.18fr);gap:24px;align-items:center;border:3px solid #f1d6e7;border-radius:30px;background:radial-gradient(circle at 12% 12%,#fff 0 3px,transparent 4px),linear-gradient(135deg,#fff5fa,#f4f1ff 55%,#f2fbf7);box-shadow:0 8px 0 #ead9ed,0 14px 28px rgba(130,101,148,.10);overflow:hidden}
+.helper-gacha-art{min-width:0;text-align:center;padding:8px 6px 4px;position:relative}
+.helper-art-title{position:relative;display:inline-block;padding:12px 28px;margin-bottom:-8px;border:3px solid #edb7d0;border-radius:28px;background:#fffdf8;color:#72527d;font-size:23px;font-weight:900;line-height:1.25;transform:rotate(-3deg);z-index:1;box-shadow:0 4px 0 #f4dce9}
+.helper-art-title strong{color:#e76c9e}.helper-art-title span{position:absolute;right:-13px;top:-17px;color:#f4bd4f;font-size:30px}
+.helper-machine{display:block;width:min(100%,310px);height:auto;margin:0 auto;filter:drop-shadow(0 8px 5px rgba(125,91,143,.12))}
+.helper-art-caption{margin-top:-2px;color:#987da2;font-size:13px;font-weight:800}
+.helper-gacha-controls{min-width:0;padding:20px;border:2px solid #f0dce9;border-radius:25px;background:rgba(255,255,255,.84);box-shadow:inset 0 0 0 5px #fff8fb}
+.helper-panel-heading{display:flex;flex-direction:column;gap:5px;margin-bottom:17px;color:#72527d;font-size:21px;font-weight:900}
+.helper-panel-heading small{color:#a18ca8;font-size:12px;font-weight:600}
+.helper-count-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px;color:#7d6685;font-size:14px;font-weight:800}
+#classHelperCount{padding:9px 13px;border:2px solid #ead7e8;border-radius:13px;background:#fff8fc;color:#775b83;font:inherit;font-weight:800}
+.class-helper-result{min-height:115px;padding:16px 12px;border:2px dashed #efc9df;border-radius:20px;background:linear-gradient(135deg,#fff8fc,#fffdf5);text-align:center;box-sizing:border-box}
+.class-helper-day{color:#a27c9e;font-size:13px;font-weight:900}
+.class-helper-names{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:13px 0 7px}
+.class-helper-person{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:95px;padding:12px 10px;border:2px solid #f4d5e5;border-radius:17px;background:#fff0f6;color:#765b80;font-size:19px;font-weight:900;box-shadow:0 3px 0 #f2dce9}
+.class-helper-person:nth-child(2n){background:#f0f7ff;border-color:#d9e7f7;box-shadow:0 3px 0 #dce9f7}
+.class-helper-skip{padding:6px 10px;border:1px solid #e8d8ee;border-radius:999px;background:#fff;color:#91769c;font-size:11px;font-weight:800;cursor:pointer}
+.class-helper-empty{color:#a18da8;font-size:14px;font-weight:700}.class-helper-tip{margin:8px 0 0;color:#a394a8;font-size:11px;line-height:1.5}
+.class-helper-button{display:block;width:100%;padding:13px 16px;border:0;border-radius:18px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;transition:transform .15s ease,filter .15s ease}
+.class-helper-button:active{transform:translateY(2px)}
+.class-helper-button.primary{margin:12px 0;background:linear-gradient(180deg,#ff91b8,#ed6599);color:white;box-shadow:0 5px 0 #cf5486;text-shadow:0 1px 1px rgba(120,50,90,.2)}
+.class-helper-button.secondary{width:auto;margin:9px 0 0 auto;padding:9px 15px;background:#f4edff;border:1px solid #e3d5f4;color:#80658d;font-size:13px}
+.helper-name-settings{margin-top:16px;padding-top:14px;border-top:1px dashed #e9d9e8}
+.helper-name-settings label{display:block;margin-bottom:7px;color:#80658d;font-size:13px;font-weight:900}
+#classHelperNames{display:block;width:100%;min-height:74px;padding:10px 12px;resize:vertical;box-sizing:border-box;border:1px solid #eadce9;border-radius:13px;background:#fff;color:#67566f;font:inherit;font-size:13px;line-height:1.5}
+@media(max-width:700px){.class-helper-panel{grid-template-columns:1fr;gap:10px;padding:15px}.helper-machine{width:min(75%,270px)}.helper-art-title{font-size:20px}.helper-gacha-controls{padding:15px}.helper-panel-heading{font-size:19px}.class-helper-person{min-width:82px;font-size:17px}}
 </style>
 
 </head>
@@ -1528,20 +1536,43 @@ footer{
 
 <!-- 우리 반 도우미 뽑기 -->
 <section class="class-helper-panel" id="classHelperPanel">
-  <h2>🌟 우리 반 도우미 뽑기</h2>
-  <p class="class-helper-intro">이름을 한 번 입력하면 월요일부터 금요일까지 차례대로 도우미를 만나요.</p>
-  <label class="class-helper-label" for="classHelperNames">우리 반 아이들 이름</label>
-  <textarea id="classHelperNames" placeholder="이름을 한 줄에 한 명씩 적어 주세요.&#10;예) 김하늘&#10;이도윤&#10;박서아"></textarea>
-  <div class="class-helper-controls">
-    <button type="button" id="classHelperSave" class="class-helper-button secondary">이름 저장</button>
-    <label for="classHelperCount">하루 도우미</label>
-    <select id="classHelperCount"><option value="1">1명</option><option value="2">2명</option><option value="3">3명</option><option value="4">4명</option></select>
-    <button type="button" id="classHelperDraw" class="class-helper-button primary">오늘의 도우미 뽑기</button>
+  <div class="helper-gacha-art" aria-hidden="true">
+    <div class="helper-art-title">우리 반<br><strong>도우미 뽑기</strong><span>✦</span></div>
+    <svg class="helper-machine" viewBox="0 0 340 390" role="img" aria-label="알록달록 캡슐이 들어 있는 분홍색 뽑기 기계">
+      <defs><linearGradient id="gachaGlass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#d9d6ff" stop-opacity=".75"/></linearGradient><linearGradient id="gachaPink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffb9d2"/><stop offset="1" stop-color="#ed78ad"/></linearGradient></defs>
+      <path d="M72 115 Q72 70 170 70 Q268 70 268 115 L285 285 Q285 307 263 307 H77 Q55 307 55 285Z" fill="url(#gachaGlass)" stroke="#a98ab8" stroke-width="7"/>
+      <circle cx="116" cy="175" r="39" fill="#ffb5d0" stroke="#fff" stroke-width="6"/><path d="M77 175a39 39 0 0 0 78 0" fill="#f58db7"/>
+      <circle cx="190" cy="151" r="42" fill="#ffe28e" stroke="#fff" stroke-width="6"/><path d="M148 151a42 42 0 0 0 84 0" fill="#ffc65d"/>
+      <circle cx="224" cy="222" r="38" fill="#bce6fa" stroke="#fff" stroke-width="6"/><path d="M186 222a38 38 0 0 0 76 0" fill="#83c9ed"/>
+      <circle cx="128" cy="247" r="35" fill="#d8c4f6" stroke="#fff" stroke-width="6"/><path d="M93 247a35 35 0 0 0 70 0" fill="#b69be8"/>
+      <path d="M55 276 H285 V333 Q285 350 267 350 H73 Q55 350 55 333Z" fill="url(#gachaPink)" stroke="#b86f9a" stroke-width="6"/>
+      <circle cx="170" cy="313" r="31" fill="#ffd86f" stroke="#c78c43" stroke-width="6"/><path d="M151 313h38" stroke="#fff2b4" stroke-width="8" stroke-linecap="round"/>
+      <path d="M117 350h106l-12 27h-82Z" fill="#a96d96" stroke="#8b5a83" stroke-width="5"/>
+      <path d="M89 105q8-17 24-20M245 105q-7-17-23-20" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+      <path d="M170 18l9 18 20 3-15 14 4 20-18-10-18 10 4-20-15-14 20-3Z" fill="#ffcf54" stroke="#e5a83f" stroke-width="4"/>
+      <circle cx="71" cy="55" r="7" fill="#ff9cbd"/><circle cx="274" cy="52" r="8" fill="#9ed9c3"/>
+    </svg>
+    <div class="helper-art-caption">두근두근! 오늘의 주인공은 누구? 💗</div>
   </div>
-  <div class="class-helper-result" aria-live="polite">
-    <div class="class-helper-day" id="classHelperDay">오늘의 도우미</div>
-    <div class="class-helper-names" id="classHelperResult"><span class="class-helper-empty">아이들 이름을 입력하고 저장해 주세요 😊</span></div>
-    <p class="class-helper-tip" id="classHelperTip">결석한 친구가 있으면 해당 친구 옆의 버튼을 눌러 다음 친구에게 순서를 넘길 수 있어요.</p>
+  <div class="helper-gacha-controls">
+    <div class="helper-panel-heading"><span>🌈 우리 반 도우미</span><small>월요일부터 금요일까지 차례대로!</small></div>
+    <div class="helper-count-row"><label for="classHelperCount">오늘 도우미는 몇 명?</label>
+      <select id="classHelperCount"><option value="1">1명</option><option value="2">2명</option><option value="3">3명</option><option value="4">4명</option></select>
+    </div>
+    <div class="class-helper-result" aria-live="polite">
+      <div class="class-helper-day" id="classHelperDay">오늘의 도우미</div>
+      <div class="class-helper-names" id="classHelperResult"><span class="class-helper-empty">친구 이름을 등록하고 뽑아 보세요! ✨</span></div>
+      <p class="class-helper-tip" id="classHelperTip">결석한 친구는 이름 옆의 ‘다음 친구’ 버튼으로 순서를 넘겨요.</p>
+    </div>
+    <button type="button" id="classHelperDraw" class="class-helper-button primary">🎁 오늘의 도우미 뽑기!</button>
+    <div class="helper-name-settings">
+      <label for="classHelperNames">📝 우리 반 친구 이름</label>
+      <textarea id="classHelperNames" placeholder="이름을 한 줄에 한 명씩 적어 주세요.
+예) 김하늘
+이도윤
+박서아"></textarea>
+      <button type="button" id="classHelperSave" class="class-helper-button secondary">이름 저장하기</button>
+    </div>
   </div>
 </section>
 
