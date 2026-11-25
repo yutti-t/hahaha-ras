@@ -1774,6 +1774,7 @@ footer{
       <h3 id="libraryDetailTitle">책 제목</h3>
       <p id="libraryDetailAuthor"></p>
       <p id="libraryDetailYear"></p>
+      <p id="libraryReadRecordedDate" class="library-small-note" style="margin-top:7px;color:#7B9A72;font-weight:800">🗓️ 독서 기록 작성일: 아직 기록 전</p>
       <div class="library-field">
         <label for="libraryCategory">책 종류</label>
         <select id="libraryCategory">
@@ -3498,7 +3499,7 @@ async function loadSharedBooks() {
       category: row.category || "그림책",
       childrenRating: row.children_rating || 0,
       teacherRating: row.teacher_rating || 0,
-      thoughts: row.thoughts || "", color: LIBRARY_COLORS[0]
+      thoughts: row.thoughts || "", createdAt: row.created_at || null, color: LIBRARY_COLORS[0]
     }));
     renderLibrary();
     document.querySelector(".library-actions").style.display = sharedCanEdit ? "flex" : "none";
@@ -3817,6 +3818,7 @@ async function saveLibraryDetail(){
   book.teacherRating = teacherStars;
   const ok = await saveSharedBook(book);
   if(ok){
+    setLibraryReadDate(book.id,new Date().toISOString());
     await loadSharedBooks();
     closeLibraryDetail();
     alert("독서 기록을 저장했어요! 📚");
@@ -3840,6 +3842,30 @@ async function deleteLibraryBook(){
     alert("책을 삭제하지 못했어요: " + (error.message || error));
   }
 }
+const LIBRARY_READ_DATE_KEY = "rasHahahaLibraryReadDates";
+function getLibraryReadDates(){
+  try{return JSON.parse(localStorage.getItem(LIBRARY_READ_DATE_KEY)||"{}")||{};}
+  catch(error){return {};}
+}
+function setLibraryReadDate(bookId, isoDate){
+  const dates=getLibraryReadDates();
+  dates[String(bookId)]=isoDate;
+  try{localStorage.setItem(LIBRARY_READ_DATE_KEY,JSON.stringify(dates));}catch(error){}
+}
+function formatLibraryReadDate(value){
+  if(!value)return "아직 기록 전";
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return "아직 기록 전";
+  return date.getFullYear()+"년 "+(date.getMonth()+1)+"월 "+date.getDate()+"일";
+}
+function renderLibraryReadDate(book){
+  const el=document.getElementById("libraryReadRecordedDate");
+  if(!el)return;
+  const dates=getLibraryReadDates();
+  const recorded=dates[String(book.id)] || book.createdAt || null;
+  el.textContent="🗓️ 독서 기록 작성일: "+formatLibraryReadDate(recorded);
+}
+
 function openLibraryBook(id){
   const book = libraryBooks.find(item => String(item.id) === String(id));
   if(!book) return;
@@ -3850,6 +3876,7 @@ function openLibraryBook(id){
   document.getElementById("libraryDetailTitle").textContent = book.title || "";
   document.getElementById("libraryDetailAuthor").textContent = book.author ? "글쓴이: " + book.author : "";
   document.getElementById("libraryDetailYear").textContent = book.year ? book.year + "년 출판" : "";
+  renderLibraryReadDate(book);
   const coverArea = document.getElementById("libraryCoverArea");
   coverArea.innerHTML = "";
   if(book.cover){
