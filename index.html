@@ -1250,11 +1250,6 @@ footer{
   text-align:center;overflow:hidden;display:-webkit-box;
   -webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all;
 }
-#libraryPage .library-card-read-date{
-  display:block;width:100%;min-height:1.4em;margin-top:-2px;
-  color:#9A9B7C;font-size:11px;font-weight:700;line-height:1.35;
-  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
 #libraryPage .library-card-rating{display:flex;justify-content:center;gap:2px;color:#D9D2D0;font-size:19px;line-height:1.1}
 #libraryPage .library-card-rating .filled{color:#F2BE4F}
 #libraryPage .library-add-card{align-items:center;justify-content:center;min-height:220px;border-style:dashed;text-align:center}
@@ -1779,7 +1774,6 @@ footer{
       <h3 id="libraryDetailTitle">책 제목</h3>
       <p id="libraryDetailAuthor"></p>
       <p id="libraryDetailYear"></p>
-      <p id="libraryReadRecordedDate" class="library-small-note" style="margin-top:7px;color:#7B9A72;font-weight:800">🗓️ 독서 기록 작성일: 아직 기록 전</p>
       <div class="library-field">
         <label for="libraryCategory">책 종류</label>
         <select id="libraryCategory">
@@ -3504,7 +3498,7 @@ async function loadSharedBooks() {
       category: row.category || "그림책",
       childrenRating: row.children_rating || 0,
       teacherRating: row.teacher_rating || 0,
-      thoughts: row.thoughts || "", createdAt: row.created_at || null, color: LIBRARY_COLORS[0]
+      thoughts: row.thoughts || "", readDate: row.read_date || "", color: LIBRARY_COLORS[0]
     }));
     renderLibrary();
     document.querySelector(".library-actions").style.display = sharedCanEdit ? "flex" : "none";
@@ -3741,6 +3735,7 @@ async function openLibrary() {
 #libraryPage .library-card-cover{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:12px;background:#f4f0e9}
 #libraryPage .library-card-cover img{width:100%;height:100%;object-fit:contain}
 #libraryPage .library-card-title{min-height:2.7em;text-align:center;font-size:14px;font-weight:800;line-height:1.35;color:#5e6e5b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#libraryPage .library-card-read-date{min-height:1.35em;text-align:center;font-size:11px;font-weight:700;line-height:1.35;color:#9a9b7c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #libraryPage .library-card-rating{display:flex;justify-content:center;gap:2px;color:#d9d2d0;font-size:19px;line-height:1.1}
 #libraryPage .library-card-rating .filled{color:#f2be4f}
 #libraryPage .library-add-card{min-height:190px;align-items:center;justify-content:center;border-style:dashed;text-align:center}
@@ -3785,8 +3780,7 @@ function renderLibrary(){
     title.textContent = book.title || "제목 없는 책";
     const readDate = document.createElement("span");
     readDate.className = "library-card-read-date";
-    const savedReadDate = getLibraryReadDates()[String(book.id)];
-    readDate.textContent = savedReadDate ? "📅 " + formatLibraryReadDate(savedReadDate) : "📅 독서 기록 전";
+    readDate.textContent = book.readDate ? "📅 " + book.readDate.replace(/-/g, ".") : "📅 아직 독서 기록 전";
     const rating = document.createElement("span");
     rating.className = "library-card-rating";
     const score = Math.max(0, Math.min(5, Number(book.childrenRating) || 0));
@@ -3827,7 +3821,6 @@ async function saveLibraryDetail(){
   book.teacherRating = teacherStars;
   const ok = await saveSharedBook(book);
   if(ok){
-    setLibraryReadDate(book.id,new Date().toISOString());
     await loadSharedBooks();
     closeLibraryDetail();
     alert("독서 기록을 저장했어요! 📚");
@@ -3851,30 +3844,6 @@ async function deleteLibraryBook(){
     alert("책을 삭제하지 못했어요: " + (error.message || error));
   }
 }
-const LIBRARY_READ_DATE_KEY = "rasHahahaLibraryReadDates";
-function getLibraryReadDates(){
-  try{return JSON.parse(localStorage.getItem(LIBRARY_READ_DATE_KEY)||"{}")||{};}
-  catch(error){return {};}
-}
-function setLibraryReadDate(bookId, isoDate){
-  const dates=getLibraryReadDates();
-  dates[String(bookId)]=isoDate;
-  try{localStorage.setItem(LIBRARY_READ_DATE_KEY,JSON.stringify(dates));}catch(error){}
-}
-function formatLibraryReadDate(value){
-  if(!value)return "아직 기록 전";
-  const date=new Date(value);
-  if(Number.isNaN(date.getTime()))return "아직 기록 전";
-  return date.getFullYear()+"년 "+(date.getMonth()+1)+"월 "+date.getDate()+"일";
-}
-function renderLibraryReadDate(book){
-  const el=document.getElementById("libraryReadRecordedDate");
-  if(!el)return;
-  const dates=getLibraryReadDates();
-  const recorded=dates[String(book.id)] || book.createdAt || null;
-  el.textContent="🗓️ 독서 기록 작성일: "+formatLibraryReadDate(recorded);
-}
-
 function openLibraryBook(id){
   const book = libraryBooks.find(item => String(item.id) === String(id));
   if(!book) return;
@@ -3885,7 +3854,6 @@ function openLibraryBook(id){
   document.getElementById("libraryDetailTitle").textContent = book.title || "";
   document.getElementById("libraryDetailAuthor").textContent = book.author ? "글쓴이: " + book.author : "";
   document.getElementById("libraryDetailYear").textContent = book.year ? book.year + "년 출판" : "";
-  renderLibraryReadDate(book);
   const coverArea = document.getElementById("libraryCoverArea");
   coverArea.innerHTML = "";
   if(book.cover){
